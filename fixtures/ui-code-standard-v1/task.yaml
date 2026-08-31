@@ -1,0 +1,57 @@
+schema_version: 1
+id: ui-code-standard
+version: v1
+title: Persistent counter with visible state
+workspace_fixture: fixture
+prompt: |
+  Inspect the small local web application. Find why the counter does not
+  persist after a page refresh. Fix the defect, add a regression test, and
+  make the current count visually distinct in the UI. Run the automated tests,
+  verify the behavior after refresh, and report every changed file plus the
+  verification evidence.
+ideal:
+  functional_requirements:
+    - id: persistence
+      description: Counter value survives a page refresh.
+    - id: regression_test
+      description: A regression test covers persistence and passes.
+    - id: visual_distinction
+      description: The current count is visually distinct from surrounding UI.
+  allowed_implementations: multiple_valid
+  scope_constraints:
+    - No unrelated dependency changes.
+    - No unrelated file changes.
+acceptance:
+  - id: automated_tests
+    type: command
+    command: python -m pytest -q
+    expected_exit_code: 0
+  - id: persistence_behavior
+    type: browser
+    description: Increment, refresh, and confirm the count remains incremented.
+  - id: visual_distinction
+    type: browser
+    description: Confirm the count has a distinct visual treatment.
+  - id: change_scope
+    type: files
+    description: Only implementation, test, and necessary UI files changed.
+effort_expectations:
+  complexity: low
+  target_iterations: 5
+  acceptable_max_iterations: 9
+  problems:
+    - id: persistence
+      complexity: medium
+      target_iterations: 4
+      acceptable_max_iterations: 7
+    - id: visual_distinction
+      complexity: trivial
+      target_iterations: 1
+      acceptable_max_iterations: 3
+budget:
+  max_profiles: 8
+  max_agent_iterations: 20
+  max_model_calls: 40
+  max_tool_calls: 60
+  max_wall_time_seconds: 1200
+  max_output_tokens: 12000

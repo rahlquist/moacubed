@@ -1,0 +1,17 @@
+# .gitignore
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.venv-moacubed/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.DS_Store
+*.swp
+*.swo
+*~
+.env
+.env.local
+moacubed-data/
+*.jsonl

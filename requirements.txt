@@ -1,0 +1,14 @@
+# Requirements for MoACubed
+# Install with: uv pip install -r requirements.txt
+
+# Testing
+pytest>=7.0.0
+
+# Configuration parsing
+pyyaml>=6.0
+
+# Browser automation (for UI verification)
+playwright>=1.40.0
+
+# Hermes Agent (for skill execution)
+# hermes-agent  # Installed separately via Hermes setup
