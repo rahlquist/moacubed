@@ -31,7 +31,7 @@ Run a frozen standard or user-supplied baseline against Hermes profiles under id
 6. Classify iterations as productive, unproductive, or disproportionate. Compare effort with the baseline's complexity-specific target. Do not penalize necessary debugging like repeated work on a genuinely hard defect.
 7. Run every acceptance check. Use command checks for tests/builds, browser checks for UI behavior, file checks for artifacts/scope, and explicit external-state readback where relevant.
 8. Score the result vector: correctness, completeness, verification, safety, human alignment, efficiency, robustness, tool orchestration, communication, plus UI/code dimensions when relevant. Apply safety/correctness/verification/completeness gates before calculating utility.
-9. Write an append-only level-set record to the active profile's `moacubed-data/levelsets.jsonl` and regenerate its `moacubed.md` ledger.
+8. Write an append-only level-set record to the tested acting profile's `moacubed-data/levelsets.jsonl` and regenerate its `moacubed.md` ledger. If the run is profile-aware MoA, write the MoA result under the aggregator profile instead, with explicit aggregator/reference role metadata.
 10. Compare profiles by verified quality first, then safety, effort discipline, latency, and cost. Report `better`, `equivalent`, `same_lower_cost`, `same_lower_latency`, `worse`, or `uncertain`; include sample count and confidence.
 
 ## Iteration Accounting

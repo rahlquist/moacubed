@@ -17,8 +17,12 @@ Collect human-grounded feedback on a completed MoA turn or task. Store the revie
 
 ## When to Use
 
-- A completed MoA turn or task needs human review.
+- A completed MoA turn or task needs structured human review.
 - The user wants to identify useful, misleading, or missing advice.
+- A profile-aware MoACubed trace needs aggregator/reference attribution review.
+
+For profile-aware traces, review the aggregator as the result owner and assess reference usefulness only in that aggregator context.
+
 - A later targeted test needs a concrete complaint.
 
 ## Procedure

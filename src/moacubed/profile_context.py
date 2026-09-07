@@ -51,7 +51,7 @@ def _profile_model(name: str, home: Path) -> tuple[str | None, str | None, str |
         try:
             data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
             model = data.get("model", {}) if isinstance(data, dict) else {}
-            return model.get("provider"), model.get("model") or model.get("name"), model.get("reasoning_effort")
+            return model.get("provider"), model.get("model") or model.get("name") or model.get("default"), model.get("reasoning_effort")
         except Exception:
             return None, None, None
     return None, None, None

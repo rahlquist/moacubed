@@ -24,7 +24,7 @@ Run bounded counterfactual tests against candidate Hermes profiles for a concret
 ## Procedure
 
 1. Load the review and source trace, or structure the user's explicit issue.
-2. Record target, category, severity, aggregator agreement, accepted requirements, and available evidence.
+2. Record target, category, severity, aggregator agreement, accepted requirements, and available evidence. Store profile-aware MoA results under the aggregator profile; compare references only in the aggregator context.
 3. Select the smallest valid scope:
    - style-only: record preference; no replay;
    - disputed claim: claim evaluation;

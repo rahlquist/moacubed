@@ -17,7 +17,7 @@
 
 ## Current limitation
 
-The direct reference adapter is now implemented and covered by adapter tests. A live reference smoke test still depends on the active Hermes process environment having a usable provider/model route for the selected reference profile. No fake reference output is generated when that route is unavailable.
+The direct reference adapter is now implemented and covered by adapter tests. It runs a bridge in Hermes' own Python environment, preserving Hermes provider dependencies and calling `task="moa_reference"` with no tools. A live reference smoke test reached the configured provider but the selected `tencent/hy3:free` model returned HTTP 404 because its free period ended. No fake reference output is generated when that route is unavailable.
 
 ## Next implementation slice
 
