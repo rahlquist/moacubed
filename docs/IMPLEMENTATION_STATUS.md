@@ -8,7 +8,7 @@
 - Bounded parallel reference orchestration API.
 - Fanout cadence validation (`user_turn`, `per_iteration`, `every_n:N`).
 - Normal Hermes subprocess boundary for the full-profile aggregator.
-- Append-only profile-aware MoA trace storage.
+- Append-only aggregator-owned profile-aware MoA trace storage with explicit role metadata and a compact derived cross-context index.
 - Explicit `moacubed-moa` CLI entry point.
 - Temporary-Hermes-home unit/integration coverage.
 

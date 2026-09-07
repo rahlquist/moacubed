@@ -13,7 +13,9 @@ from moacubed.scoring import RunScore, Score, compare_runs, score_run
 from moacubed.profile_context import ProfileContext, load_profile_context, load_profiles, sanitize_persona
 from moacubed.profile_moa import MoAOptions, MoARunResult, ReferenceResult, fanout_due, run_profile_aware_moa
 from moacubed.aggregator_runtime import run_aggregator_profile
-from moacubed.trace_records import read_profile_moa_traces, write_profile_moa_trace
+from moacubed.trace_records import (build_context_metadata, read_derived_index, read_profile_moa_traces,
+                                     write_aggregator_record, write_derived_index, write_profile_baseline,
+                                     write_profile_moa_trace)
 
 __all__ = [
     "BaselineTask", "Budget", "DistinctivenessResult", "ProfileConfig", "RecordWriter",
@@ -23,5 +25,6 @@ __all__ = [
     "materialize_workspace", "moacubed_dir", "now_iso", "preflight_check", "profile_home", "sanitize_persona",
     "run_acceptance_checks", "run_browser_check", "run_command_check", "run_file_check", "run_profile",
     "run_aggregator_profile", "run_profile_aware_moa", "fanout_due", "score_run", "write_ledger",
-    "read_profile_moa_traces", "write_profile_moa_trace",
+    "build_context_metadata", "read_derived_index", "read_profile_moa_traces",
+    "write_aggregator_record", "write_derived_index", "write_profile_baseline", "write_profile_moa_trace",
 ]

@@ -68,7 +68,23 @@ MoACubed is a three-skill evaluation system for Hermes profiles and MoA configur
 
 ## 3. State and storage
 
-Use `$HERMES_HOME`, never a hardcoded home. For profile `default`, store at `$HERMES_HOME/moacubed.md`; for another profile, store at `$HERMES_HOME/profiles/<name>/moacubed.md`.
+Use `$HERMES_HOME`, never a hardcoded home. Standalone acting-profile results belong with the tested profile. Profile-aware MoA results belong with the aggregator because reference usefulness and final quality are conditional on the aggregator's profile, model, skills, tools, persona, and synthesis behavior.
+
+For a profile-aware MoA run with aggregator `default`:
+
+```text
+$HERMES_HOME/moacubed.md
+$HERMES_HOME/moacubed-data/profile-moa.jsonl
+```
+
+For aggregator `code`:
+
+```text
+$HERMES_HOME/profiles/code/moacubed.md
+$HERMES_HOME/profiles/code/moacubed-data/profile-moa.jsonl
+```
+
+Standalone level-set results remain under the tested profile's `levelsets.jsonl`. A compact derived cross-context index may live under `$HERMES_HOME/moacubed-index/profile-performance.jsonl`; it must not contain raw prompts or model output.
 
 Detailed records live beside the ledger:
 
