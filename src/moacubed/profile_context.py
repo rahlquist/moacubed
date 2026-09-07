@@ -5,6 +5,7 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
+import yaml
 from .foundation import hermes_home, profile_home, _normalize_whitespace, discover_profiles
 
 _SECRET_PATTERNS = (
@@ -41,6 +42,21 @@ def sanitize_persona(text: str) -> str:
 def _canonical(text: str) -> str:
     return _normalize_whitespace(re.sub(r"^\s*<!--.*?-->\s*$", "", text, flags=re.M | re.S).lower())
 
+def _profile_model(name: str, home: Path) -> tuple[str | None, str | None, str | None]:
+    """Read non-secret model identity from a profile config when available."""
+    for filename in ("config.yaml", "config.yml"):
+        path = home / filename
+        if not path.exists():
+            continue
+        try:
+            data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            model = data.get("model", {}) if isinstance(data, dict) else {}
+            return model.get("provider"), model.get("model") or model.get("name"), model.get("reasoning_effort")
+        except Exception:
+            return None, None, None
+    return None, None, None
+
+
 def load_profile_context(name: str) -> ProfileContext:
     home = profile_home(None if name == "default" else name)
     soul_path = home / "SOUL.md"
@@ -51,10 +67,12 @@ def load_profile_context(name: str) -> ProfileContext:
     skills = tuple(sorted(p.name for p in skills_dir.iterdir() if p.is_dir() and (p / "SKILL.md").exists())) if skills_dir.is_dir() else ()
     digest = hashlib.sha256(raw.encode()).hexdigest() if raw else None
     persona_digest = hashlib.sha256(persona_canonical.encode()).hexdigest() if persona_canonical else None
-    config_material = f"{name}|{digest}|{','.join(skills)}"
+    provider, model, reasoning = _profile_model(name, home)
+    config_material = f"{digest}|{provider}|{model}|{reasoning}|{','.join(skills)}"
     fp = hashlib.sha256(config_material.encode()).hexdigest()
     return ProfileContext(name=name, home=home, soul_digest=digest, persona_digest=persona_digest,
-                          persona=persona, skills=skills, configuration_fingerprint=fp)
+                          persona=persona, skills=skills, provider=provider, model=model,
+                          reasoning_effort=reasoning, configuration_fingerprint=fp)
 
 def load_profiles(names: list[str]) -> list[ProfileContext]:
     return [load_profile_context(name) for name in names]

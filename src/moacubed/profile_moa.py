@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from typing import Any, Callable
 from .profile_context import ProfileContext, load_profile_context
 from .persona_prompt import reference_prompt, aggregator_prompt
+from .reference_runtime import call_reference
 
 @dataclass
 class MoAOptions:
@@ -17,6 +18,7 @@ class MoAOptions:
     aggregator_timeout_seconds: int = 1200
     max_total_model_calls: int = 40
     max_total_output_tokens: int = 12000
+    max_reference_profiles: int = 4
     privacy_mode: str = "full"
     native_compatibility_label: str = "profile-aware-v1"
 
@@ -24,7 +26,7 @@ class MoAOptions:
         if self.fanout != "user_turn" and self.fanout != "per_iteration" and not (self.fanout.startswith("every_n:") and int(self.fanout.split(":", 1)[1]) >= 2):
             raise ValueError(f"invalid fanout: {self.fanout}")
         if not 1 <= self.max_reference_workers <= 16: raise ValueError("max_reference_workers must be 1..16")
-        if self.reference_max_tokens <= 0 or self.max_total_model_calls <= 0 or self.max_total_output_tokens <= 0: raise ValueError("budgets must be positive")
+        if self.reference_max_tokens <= 0 or self.max_total_model_calls <= 0 or self.max_total_output_tokens <= 0 or self.max_reference_profiles <= 0: raise ValueError("budgets must be positive")
         if self.privacy_mode not in {"display", "full"}: raise ValueError("privacy_mode must be display or full")
 
 def _now() -> str: return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -65,12 +67,19 @@ def run_profile_aware_moa(task: str, aggregator_profile: str, reference_profiles
     options = options or MoAOptions(); options.validate()
     if not aggregator_profile: raise ValueError("aggregator_profile is required")
     if aggregator_profile in reference_profiles: raise ValueError("aggregator cannot also be a reference")
+    if len(reference_profiles) > options.max_reference_profiles:
+        raise ValueError(f"reference profile budget exceeded: {len(reference_profiles)} > {options.max_reference_profiles}")
     agg = load_profile_context(aggregator_profile)
     refs = [load_profile_context(name) for name in reference_profiles]
+    fingerprints = {}
+    for profile in [agg, *refs]:
+        if profile.configuration_fingerprint in fingerprints:
+            raise ValueError(f"exact duplicate profile configuration: {profile.name} == {fingerprints[profile.configuration_fingerprint]}")
+        fingerprints[profile.configuration_fingerprint] = profile.name
     result = MoARunResult(run_id=run_id or f"moa_{agg.name}_{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}", aggregator_profile=agg.name, reference_profiles=reference_profiles, status="aggregator_started")
     def default_ref(profile: ProfileContext, prompt: str, opts: MoAOptions) -> ReferenceResult:
         return ReferenceResult(profile=profile.name, persona_digest=profile.persona_digest, status="blocked", error="no reference caller configured")
-    caller = reference_caller or default_ref
+    caller = reference_caller or call_reference
     with ThreadPoolExecutor(max_workers=min(options.max_reference_workers, max(1, len(refs)))) as pool:
         futures = {pool.submit(caller, p, reference_prompt(p, task, context), options): p for p in refs}
         for future in as_completed(futures):

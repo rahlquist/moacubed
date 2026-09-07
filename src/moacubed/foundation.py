@@ -514,6 +514,23 @@ def generate_ledger(profile: str | None = None) -> str:
         lines.append("| — | — | — | — |")
     lines.append("")
 
+    lines.append("## Profile-Aware MoA Results")
+    lines.append("")
+    lines.append("| Run ID | Aggregator | References | Status | Score |")
+    lines.append("|---|---|---|---|---:|")
+    moa_path = data_dir / "profile-moa.jsonl"
+    if moa_path.exists():
+        for raw in moa_path.read_text().splitlines():
+            if not raw.strip():
+                continue
+            rec = json.loads(raw)
+            refs = rec.get("context", {}).get("references", [])
+            ref_names = ", ".join(str(r.get("profile", "-")) for r in refs) or "-"
+            lines.append(f"| `{rec.get('run_id', '-')}` | `{rec.get('aggregator_profile', profile or 'default')}` | `{ref_names}` | {rec.get('status', '-')} | {rec.get('overall_score', '-')} |")
+    else:
+        lines.append("| — | — | — | — | — |")
+    lines.append("")
+
     lines.append("## Routing Recommendations")
     lines.append("")
     lines.append("| Recommendation | Domain | Confidence | Status |")
