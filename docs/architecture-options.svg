@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200">
+<defs><style>
+.bg{fill:#101827}.title{font:700 42px sans-serif;fill:#f5f7ff}.sub{font:22px sans-serif;fill:#a9b7d0}.head{font:700 25px sans-serif;fill:#fff}.body{font:20px sans-serif;fill:#d7e0f0}.small{font:18px sans-serif;fill:#c4d0e5}.good{fill:#163d38;stroke:#42d6b1}.mid{fill:#183754;stroke:#55b8ff}.risk{fill:#422b35;stroke:#ff849d}.future{fill:#3a321c;stroke:#f0c75e}.card{stroke-width:3;rx:18}.line{stroke:#7385a5;stroke-width:2}.accent{fill:#55b8ff}.green{fill:#42d6b1}.yellow{fill:#f0c75e}.pink{fill:#ff849d}
+</style></defs>
+<rect class="bg" width="1800" height="1200"/>
+<text x="70" y="78" class="title">MoACubed runtime architecture options</text>
+<text x="70" y="118" class="sub">How to add profile-aware MoA: persona-only references, full-profile aggregator, verified routing evidence</text>
+
+<!-- header -->
+<rect x="70" y="155" width="1660" height="65" fill="#1d2a40" rx="12"/>
+<text x="95" y="197" class="head">OPTION</text><text x="390" y="197" class="head">ARCHITECTURE</text><text x="890" y="197" class="head">PROS</text><text x="1300" y="197" class="head">CONS / RISK</text>
+
+<!-- cards -->
+<rect x="70" y="245" width="1660" height="175" class="card good"/>
+<text x="95" y="282" class="head">1 · Skill-only</text><text x="390" y="278" class="body">Active agent follows MoACubed skills;</text><text x="390" y="308" class="body">launches profiles through normal Hermes.</text>
+<text x="890" y="278" class="body">• Fastest proof of concept</text><text x="890" y="308" class="body">• No core changes or fork</text><text x="890" y="338" class="body">• Native profile behavior</text>
+<text x="1300" y="278" class="body">• Model must follow procedure</text><text x="1300" y="308" class="body">• Inconsistent fanout/control</text><text x="1300" y="338" class="body">• Not a true runtime replacement</text>
+
+<rect x="70" y="445" width="1660" height="205" class="card mid"/>
+<text x="95" y="485" class="head">2 · Standalone runner ★ RECOMMENDED FIRST</text><text x="390" y="480" class="body">MoACubed owns profile-aware fanout;</text><text x="390" y="510" class="body">delegates aggregator to normal Hermes.</text>
+<text x="890" y="480" class="body">• Full persona control</text><text x="890" y="510" class="body">• Full-profile aggregator</text><text x="890" y="540" class="body">• No Hermes core patch</text><text x="890" y="570" class="body">• Strong tracing and routing</text>
+<text x="1300" y="480" class="body">• Process/context transfer</text><text x="1300" y="510" class="body">• Version coordination</text><text x="1300" y="540" class="body">• Startup latency</text><text x="1300" y="570" class="body">• Explicit lifecycle needed</text>
+
+<rect x="70" y="675" width="1660" height="205" class="card risk"/>
+<text x="95" y="715" class="head">3 · Static moa_loop.py fork</text><text x="390" y="710" class="body">Copy and modify Hermes MoA runtime;</text><text x="390" y="740" class="body">profile-aware behavior inside the fork.</text>
+<text x="890" y="710" class="body">• Maximum MoA control</text><text x="890" y="740" class="body">• Can preserve fanout/accounting</text><text x="890" y="770" class="body">• Independent release cadence</text>
+<text x="1300" y="710" class="body">• Upstream drift</text><text x="1300" y="740" class="body">• Manual security/cache fixes</text><text x="1300" y="770" class="body">• Duplicated agent-runtime logic</text><text x="1300" y="800" class="body">• Highest maintenance risk</text>
+
+<rect x="70" y="905" width="1660" height="175" class="card future"/>
+<text x="95" y="945" class="head">4 · Generic Hermes extension</text><text x="390" y="940" class="body">Hermes exposes a public orchestrator</text><text x="390" y="970" class="body">interface; MoACubed supplies an adapter.</text>
+<text x="890" y="940" class="body">• Best long-term architecture</text><text x="890" y="970" class="body">• Native sessions/tools/caching</text><text x="890" y="1000" class="body">• Minimal duplicated runtime</text>
+<text x="1300" y="940" class="body">• Requires Hermes core work</text><text x="1300" y="970" class="body">• Upstream review/release cycle</text><text x="1300" y="1000" class="body">• Needs fallback for older Hermes</text>
+
+<line x1="70" y1="1120" x2="1730" y2="1120" class="line"/>
+<text x="70" y="1155" class="small">Invariant: references get SOUL.md persona only — no tools, skills, memory, MCP, or credentials. Aggregator gets full profile and remains responsible for verification.</text>
+</svg>
